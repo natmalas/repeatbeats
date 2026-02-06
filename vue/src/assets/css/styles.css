@@ -1,0 +1,23 @@
+@font-face {
+    font-family: "Libra Franklin";
+    src: url("@/assets/fonts/LibreFranklin-Black.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Libra Franklin Light";
+    src: url("@/assets/fonts/LibreFranklin-Light.woff2") format("woff2");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+* {
+    font-family: "Libra Franklin Light" !important
+}
+
+.bold {
+    font-family: "Libra Franklin" !important
+}

@@ -1,0 +1,56 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.local
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+      - redis
+    command: php artisan queue:work --sleep=1 --tries=3 --timeout=600
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: rpbeats
+      MYSQL_USER: username
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - mysql
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+
+
+volumes:
+  mysql_data:
