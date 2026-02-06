@@ -369,6 +369,9 @@ async function handleVideoSwitch() {
     v(true).pause()
     v(true).mute()
 
+    hasRepeatedCount.value = 0
+    repeatSeekTo.value = null
+
     destroyAllAudioProfiles()
 
     audioProfile.value = "clean"
@@ -447,6 +450,9 @@ watch(ytPlayerLoaded, (ready) => {
 /*                             PRESET ENFORCEMENT                             */
 /* -------------------------------------------------------------------------- */
 
+const repeatSeekTo = ref(null)
+const hasRepeatedCount = ref(0)
+
 const vPreset = computed(() => {
     return currentPreset.value ? {
         start: convertTimestamp(currentPreset.value.start, "number"),
@@ -456,8 +462,9 @@ const vPreset = computed(() => {
                 ...v,
                 start: convertTimestamp(v.start, "number"),
                 end: convertTimestamp(v.end, "number"),
+                repeatCount: v.repeatCount ?? 1,
             }
-        })
+        }),
     } : null
 })
 
@@ -483,7 +490,6 @@ function checkAgainstPreset() {
 
     for (const section of sections) {
         if (time >= section.start && time < section.end) {
-
             // SKIP
             if (section.type === 'skip') {
                 v().seek(section.end)
@@ -492,13 +498,24 @@ function checkAgainstPreset() {
 
             // REPEAT
             if (section.type === 'repeat') {
+                repeatSeekTo.value = section.start
+                return
             }
+        }
+
+        if (repeatSeekTo.value && hasRepeatedCount.value < section.repeatCount) {
+            v().seek(repeatSeekTo.value)
+            repeatSeekTo.value = null
+            hasRepeatedCount.value++
         }
     }
 }
 
 function handleVideoEnd() {
     const presetStart = vPreset.value.start ?? 0
+
+    hasRepeatedCount.value = 0
+    repeatSeekTo.value = null
 
     // NO LOOP
     if (!loopPlaylist.value) {
