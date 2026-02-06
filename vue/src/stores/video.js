@@ -581,6 +581,7 @@ export const useVideoStore = defineStore('video', () => {
 
             if (!res?.ok) {
                 useNotify().warn("Unable to update watch time")
+                lastStoredWatchTime.value = Date.now()
                 return false
             }
 
