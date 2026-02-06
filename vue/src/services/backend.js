@@ -41,7 +41,7 @@ export function backend(
         const res_playlists = await apiRequest({ method: "GET", url: "playlist/list" })
 
         if (!res_videos?.ok || !res_playlists.ok) {
-            return handleError("Unable to fetch data", res.message)
+            return handleError("Unable to fetch data")
         }
 
         const data = {
