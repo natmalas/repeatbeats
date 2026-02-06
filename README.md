@@ -55,9 +55,9 @@ To improve performance and reduce server load, data is stored and fetched locall
 Playback can be switched between video and audio where an audio file for the specific video is available. Whenever playback is switched, the inactive player is paused and muted and playback continues for the active player.
 
 ## Screenshots
-[Player](!https://repeatbeats.com/player.png)
-[Search](!https://repeatbeats.com/searching.png)
-[Edit Preset](!https://repeatbeats.com/edit-preset.png)
+![Player](https://repeatbeats.com/player.png)
+![Search](https://repeatbeats.com/searching.png)
+![Edit Preset](https://repeatbeats.com/edit-preset.png)
 
 ## Architecture Overview
 ### Major Components
